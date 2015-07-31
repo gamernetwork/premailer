@@ -114,7 +114,8 @@ class Premailer(object):
                  cache_css_parsing=True,
                  cssutils_logging_handler=None,
                  cssutils_logging_level=None,
-                 disable_leftover_css=False):
+                 disable_leftover_css=False,
+                 render_method="html"):
         self.html = html
         self.base_url = base_url
         self.preserve_internal_links = preserve_internal_links
@@ -141,6 +142,7 @@ class Premailer(object):
         self.disable_validation = disable_validation
         self.cache_css_parsing = cache_css_parsing
         self.disable_leftover_css = disable_leftover_css
+        self.render_method = render_method
 
         if cssutils_logging_handler:
             cssutils.log.addHandler(cssutils_logging_handler)
@@ -434,7 +436,7 @@ class Premailer(object):
         if hasattr(self.html, "getroottree"):
             return root
         else:
-            kwargs.setdefault('method', self.method)
+            kwargs.setdefault('method', self.render_method)
             kwargs.setdefault('pretty_print', pretty_print)
             kwargs.setdefault('encoding', 'utf-8')  # As Ken Thompson intended
             out = etree.tostring(root, **kwargs).decode(kwargs['encoding'])
